@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 WORKDIR /src
 COPY . .
 RUN dotnet restore ProductNormaliser.slnx
@@ -9,6 +10,7 @@ RUN dotnet publish ProductNormaliser.Web -c Release --no-restore -o /out/Web && 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
 COPY --from=build /out /app
+ENV LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8
 ENV ASPNETCORE_ENVIRONMENT=Production DOTNET_ENVIRONMENT=Production PN_SERVICE=Web ASPNETCORE_URLS=http://[::]:8080 Llm__Enabled=false
 EXPOSE 8080
 USER app
